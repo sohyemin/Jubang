@@ -3,12 +3,14 @@ package HelloWorld.Jubang.security;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -19,8 +21,8 @@ public class UserDTO extends User {
     private String name;
     private String password;
 
-    public UserDTO(String email, String password, String name, Collection<? extends GrantedAuthority> authorities) {
-        super(email, password, authorities);
+    public UserDTO(String email, String password, String name, List<String> roleNames) {
+        super(email, password, roleNames.stream().map(str -> new SimpleGrantedAuthority("ROLE_" + str)).collect(Collectors.toList()));
         this.email = email;
         this.name = name;
         this.password = password;

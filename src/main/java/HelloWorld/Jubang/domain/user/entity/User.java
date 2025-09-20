@@ -18,7 +18,7 @@ public class User {
 
     @Id
     private String email;
-    private String username;
+    private String name;
     private String password;
 
     @ElementCollection(fetch = FetchType.LAZY)
@@ -38,7 +38,7 @@ public class User {
         User user = User.builder()
                 .email(request.getEmail())
                 .password(request.getPassword())
-                .username(request.getusername())
+                .name(request.getname())
                 .build();
 
         if (request.getEmail().contains("admin")) {

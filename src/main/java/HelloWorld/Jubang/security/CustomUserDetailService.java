@@ -22,6 +22,18 @@ public class CustomUserDetailService implements UserDetailsService {
 
         log.info("loadUserByUsername: username: {}", username);
 
-        return null;
+        User user = userRepository.getWithRoles(username)
+                .orElseThrow(() -> new UsernameNotFoundException("미존재하는 사용자 email: " + username));
+
+        UserDTO userDTO = new UserDTO(
+                user.getEmail(),
+                user.getname(),
+                user.getPassword(),
+                user.getUserRoleList().stream().map(Enum::name).toList()
+        );
+
+        log.info("loadUserByUsername result userDTO: {}", userDTO);
+
+        return userDTO;
     }
 }
