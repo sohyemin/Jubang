@@ -1,8 +1,12 @@
 package HelloWorld.Jubang.domain.user.entity;
 
 import HelloWorld.Jubang.domain.user.dto.JoinRequestDto;
+import HelloWorld.Jubang.domain.user.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -17,11 +21,32 @@ public class User {
     private String username;
     private String password;
 
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "use_role_list", joinColumns = @JoinColumn(name = "email"))
+    @Column(name = "role")
+    @Builder.Default
+    private List<UserRole> userRoleList = new ArrayList<>();
+
+    public void addRole(UserRole userRole) { userRoleList.add(userRole); }
+
+    public void changeRole(UserRole role){
+        this.userRoleList.clear();
+        this.userRoleList.add(role);
+    }
+
     public static User from(JoinRequestDto request) {
-        return User.builder()
+        User user = User.builder()
                 .email(request.getEmail())
                 .password(request.getPassword())
                 .username(request.getusername())
                 .build();
+
+        if (request.getEmail().contains("admin")) {
+            user.addRole(UserRole.ADMIN);
+        } else {
+            user.addRole(UserRole.USER);
+        }
+
+        return user;
     }
 }
