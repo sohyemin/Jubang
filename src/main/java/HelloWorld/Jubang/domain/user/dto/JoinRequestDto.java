@@ -16,10 +16,7 @@ public class JoinRequestDto {
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
             message = "이메일 형식이 올바르지 않습니다")
     private String email;
-
-    private String firstName;
-    private String secondName;
-
+    private String username;
     private String password;
 
 }
