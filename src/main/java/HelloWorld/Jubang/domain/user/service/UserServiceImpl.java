@@ -1,6 +1,6 @@
 package HelloWorld.Jubang.domain.user.service;
 
-import HelloWorld.Jubang.domain.user.dto.JoinRequestDto;
+import HelloWorld.Jubang.domain.user.dto.JoinRequestDTO;
 import HelloWorld.Jubang.domain.user.dto.LoginResponseDTO;
 import HelloWorld.Jubang.domain.user.entity.User;
 import HelloWorld.Jubang.domain.user.repository.UserRepository;
@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService{
     private final TokenService tokenService;
 
     @Override
-    public void join(JoinRequestDto request) {
+    public void join(JoinRequestDTO request) {
 
         try{
             userRepository.findByEmail(request.getEmail())

@@ -2,6 +2,8 @@ server:
   port: 8080
 
 spring:
+  config:
+    import: optional:file:.env[.properties] # 환경변수 파일 로드
   profiles:
     active: dev
   mvc:
@@ -13,6 +15,11 @@ spring:
     url: jdbc:mysql://localhost:3306/jubangdb?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
     username: root
     password: 1234
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
 
   jpa:
@@ -29,3 +36,16 @@ spring:
 logging:
   level:
     org.hibernate.SQL: info
+
+# Redis Pub/Sub 설정
+redis:
+  notification:
+    like:
+      topic: like-notification
+
+app:
+  props:
+    jwt:
+      secret-key: ${JWT_SECRET_KEY}
+      access-token-expiration-period: 15 # 액세스 토큰의 유효기간, 분단위 15분, or 150분 = 2시간 30분
+      refresh-token-expiration-period: 1440 # 1440 # 리프레시 토큰의 유효기간, 1440분 = 60 * 24 = 24시간

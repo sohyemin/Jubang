@@ -30,7 +30,7 @@ public class TokenService {
         //토큰에 담을 정보 준비
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", user.getEmail());
-        claims.put("name", user.getname());
+        claims.put("name", user.getName());
 
         List<String> roleNames = user.getUserRoleList().stream()
                 .map(Enum::name)
@@ -52,7 +52,7 @@ public class TokenService {
         // 응답 DTO 생성
         return LoginResponseDTO.builder()
                 .email(user.getEmail())
-                .name(user.getname())
+                .name(user.getName())
                 .roles(roleNames)
                 .accessToken(accessToken)
                 .refreshToken(refreshToken) // 모바일 클라이언트를 위해 refreshToken도 반환 (웹은 쿠키 사용)

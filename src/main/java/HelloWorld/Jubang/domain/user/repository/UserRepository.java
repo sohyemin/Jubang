@@ -10,8 +10,8 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, String> {
 
-    @EntityGraph(attributePaths = {"userRoeList"})
-    @Query("select u from User u where u.mail = :email")
+    @EntityGraph(attributePaths = {"userRoleList"})
+    @Query("select u from User u where u.email = :email")
     Optional<User> getWithRoles(@Param("email") String email);
 
     @Query("select u from User u where u.email = :email")

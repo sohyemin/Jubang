@@ -3,6 +3,7 @@ package HelloWorld.Jubang.security;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Getter
 @Setter
 @ToString
@@ -21,11 +23,12 @@ public class UserDTO extends User {
     private String name;
     private String password;
 
-    public UserDTO(String email, String password, String name, List<String> roleNames) {
+    public UserDTO(String email, String name, String password, List<String> roleNames) {
         super(email, password, roleNames.stream().map(str -> new SimpleGrantedAuthority("ROLE_" + str)).collect(Collectors.toList()));
         this.email = email;
         this.name = name;
         this.password = password;
+        log.info("password: {}", password);
     }
 
     public Map<String, Object> getClaims() {

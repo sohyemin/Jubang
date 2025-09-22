@@ -1,6 +1,6 @@
 package HelloWorld.Jubang.domain.user.entity;
 
-import HelloWorld.Jubang.domain.user.dto.JoinRequestDto;
+import HelloWorld.Jubang.domain.user.dto.JoinRequestDTO;
 import HelloWorld.Jubang.domain.user.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
@@ -34,11 +34,11 @@ public class User {
         this.userRoleList.add(role);
     }
 
-    public static User from(JoinRequestDto request) {
+    public static User from(JoinRequestDTO request) {
         User user = User.builder()
                 .email(request.getEmail())
                 .password(request.getPassword())
-                .name(request.getname())
+                .name(request.getName())
                 .build();
 
         if (request.getEmail().contains("admin")) {

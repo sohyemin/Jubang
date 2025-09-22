@@ -23,6 +23,7 @@ public class JWTUtil {
 
     // 토큰 생성
     public String generateToken(Map<String, Object> valueMap, int min){
+
         SecretKey key = null;
         try {
             key = Keys.hmacShaKeyFor(jwtProps.getSecretKey().getBytes("UTF-8"));

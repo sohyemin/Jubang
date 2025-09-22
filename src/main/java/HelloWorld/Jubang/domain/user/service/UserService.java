@@ -1,15 +1,15 @@
 package HelloWorld.Jubang.domain.user.service;
 
-import HelloWorld.Jubang.domain.user.dto.JoinRequestDto;
+import HelloWorld.Jubang.domain.user.dto.JoinRequestDTO;
+import HelloWorld.Jubang.domain.user.dto.LoginResponseDTO;
 
 import java.util.Map;
 
 public interface UserService {
 
     // 가입
-    void join(JoinRequestDto joinRequestDto);
+    void join(JoinRequestDTO joinRequestDto);
 
     // 로그인
-    Map<String, Object> login(String email, String password);
-
+    LoginResponseDTO login(String email, String password);
 }
