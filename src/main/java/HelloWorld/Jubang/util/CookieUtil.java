@@ -14,4 +14,16 @@ public class CookieUtil {
                 .maxAge(mins + 60) // maxAge 설정 ( 초 )
                 .build();
     }
+
+    public static void removeTokenCookie(HttpServletResponse response, String token) {
+        ResponseCookie cookie = ResponseCookie.from(token, "")
+                .path("/")
+                .httpOnly(false)
+                .secure(true)
+                .sameSite("None")
+                .maxAge(0L)
+                .build();
+
+        response.addHeader("Set-Cookie", cookie.toString());
+    }
 }

@@ -1,7 +1,8 @@
 package HelloWorld.Jubang.util;
 
+import HelloWorld.Jubang.exception.CustomJWTException;
 import HelloWorld.Jubang.props.JwtProps;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -39,5 +40,29 @@ public class JWTUtil {
                 .setExpiration(Date.from(ZonedDateTime.now().toInstant()))
                 .signWith(key)
                 .compact();
+    }
+
+    public Map<String, Object> validateToken(String token) {
+
+        Map<String, Object> claim = null;
+        try {
+            SecretKey key = Keys.hmacShaKeyFor(jwtProps.getSecretKey().getBytes("UTF-8"));
+            claim = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (MalformedJwtException malformedJwtException) {
+            throw new CustomJWTException("MalFormed");
+        } catch (ExpiredJwtException expiredJwtException) {
+            throw new CustomJWTException("Expired");
+        } catch (InvalidClaimException invalidClaimException) {
+            throw new CustomJWTException("Invalid");
+        } catch (JwtException jwtException) {
+            throw new CustomJWTException("JWTError");
+        } catch (Exception e) {
+            throw new CustomJWTException("Error");
+        }
+        return claim;
     }
 }

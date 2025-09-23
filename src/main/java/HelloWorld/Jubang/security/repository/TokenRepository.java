@@ -26,4 +26,22 @@ public class TokenRepository {
         redisTemplate.opsForValue().set(key, refreshToken, expirationTime, TimeUnit.MINUTES);
         log.info("리프레시 토큰 저장 email {}, refreshToken: {}", email, refreshToken);
     }
+
+    /**
+     * 리프레시 토큰 삭제 (로그아웃 시)
+     */
+    public void deleteRefreshToken(String email){
+        String key = REFRESH_TOKEN_PREFIX + email;
+        redisTemplate.delete(key);
+        log.info("리프레시 토큰 삭제: {}", email);
+    }
+
+    /**
+     * 액세스 토큰 블랙리스트에 추가 (로그아웃 시)
+     */
+    public void addToBlacklist(String accessToken, long remainingTimeInMills) {
+        String key = BLACKLIST_PREFIX + accessToken;
+        redisTemplate.opsForValue().set(key, "logout", remainingTimeInMills, TimeUnit.MILLISECONDS);
+        log.info("액세스 토큰 블랙리스트(로그아웃) 추가: {}", accessToken);
+    }
 }

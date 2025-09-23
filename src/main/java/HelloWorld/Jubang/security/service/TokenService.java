@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,5 +58,28 @@ public class TokenService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken) // 모바일 클라이언트를 위해 refreshToken도 반환 (웹은 쿠키 사용)
                 .build();
+    }
+
+    /**
+     * 로그아웃 처리
+     */
+    public void logout(String email, String accessToken) {
+        // 리프레시 토큰 삭제
+        tokenRepository.deleteRefreshToken(email);
+
+        // 액세스 토큰 블랙리스트에 추가
+        // 만료 시간 계산
+        try {
+            Map<String, Object> claims = jwtUtil.validateToken(accessToken);
+            Integer exp = (Integer) claims.get("exp");
+            long expirationTime = Instant.ofEpochSecond(exp).toEpochMilli();
+            long remainingTime = expirationTime - System.currentTimeMillis();
+
+            if (remainingTime > 0) {
+                tokenRepository.addToBlacklist(accessToken, remainingTime);
+            }
+        } catch (Exception e) {
+            log.error("토큰 블랙리스트(로그아웃) 추가 중 오류: {}", e.getMessage());
+        }
     }
 }

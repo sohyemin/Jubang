@@ -12,4 +12,5 @@ public interface UserService {
 
     // 로그인
     LoginResponseDTO login(String email, String password);
+
 }
