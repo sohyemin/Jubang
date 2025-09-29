@@ -54,4 +54,7 @@ public class Room {
     @Builder.Default
     private List<RoomImage> imageList = new ArrayList<>();
 
+
 }
+
+   
