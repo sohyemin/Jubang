@@ -53,8 +53,7 @@ public class Room {
     @ElementCollection
     @Builder.Default
     private List<RoomImage> imageList = new ArrayList<>();
-
-
+    
 }
 
    
