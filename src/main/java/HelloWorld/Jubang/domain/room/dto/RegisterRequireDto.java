@@ -1,4 +1,4 @@
 package HelloWorld.Jubang.domain.room.dto;
 
-public class RegisterDto {
+public class RegisterRequireDto {
 }
