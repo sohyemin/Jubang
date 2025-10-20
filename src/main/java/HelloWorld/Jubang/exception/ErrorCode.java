@@ -8,7 +8,8 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ErrorCode {
 
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "User not founded");
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "User not founded"),
+    XSS_INPUT_ERROR(HttpStatus.BAD_REQUEST, "XSS input error");
 
     private final HttpStatus status;
     private final String message;

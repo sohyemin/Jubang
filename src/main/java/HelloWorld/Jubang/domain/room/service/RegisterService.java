@@ -9,7 +9,7 @@ public interface RegisterService {
 
     /** CREATE **/
     //방 등록
-    void insertRoom(RegisterRequestDto registerRequestDto);
+    void insertRoom(RegisterRequestDto registerRequestDto, String email);
 
     /** READ **/
     //방 전체 목록

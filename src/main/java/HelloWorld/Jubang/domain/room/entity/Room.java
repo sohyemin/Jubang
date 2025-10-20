@@ -1,5 +1,7 @@
 package HelloWorld.Jubang.domain.room.entity;
 
+import HelloWorld.Jubang.domain.room.dto.RegisterRequestDto;
+import HelloWorld.Jubang.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,7 +17,13 @@ import java.util.List;
 public class Room {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private int roomNo;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "email", nullable = false)
+    private User user;
 
     @Column(name = "name")
     private String roomName;
@@ -35,8 +43,8 @@ public class Room {
     private String basicOption;      // 기본 옵션
     private String additionalOption; // 추가 옵션
     private String building;         //건물 정보
-    private String infoElevator;     // 엘레베이터 여부
-    private String infoParking;      // 주차장 여부
+    private boolean infoElevator;     // 엘레베이터 여부
+    private boolean infoParking;      // 주차장 여부
 
     // 가격 정보
     private int roomLeastPay;
@@ -53,7 +61,57 @@ public class Room {
     @ElementCollection
     @Builder.Default
     private List<RoomImage> imageList = new ArrayList<>();
-    
+
+    public static Room from(RegisterRequestDto dto, User user) {
+        return Room.builder()
+                .user(user)
+
+                // 기본 정보
+                .roomName(dto.getRoomName())
+                .Description(dto.getDescription())
+
+                // 주소
+                .Zipcode(dto.getZipcode())
+                .Address1(dto.getAddress1())
+                .Address2(dto.getAddress2())
+
+                // 상세 카운트
+                .roomRCount(dto.getRoomRCount())
+                .roomBCount(dto.getRoomBCount())
+                .roomLCount(dto.getRoomLCount())
+                .roomKCount(dto.getRoomKCount())
+
+                // 옵션 (List → String)
+                .basicOption(String.join(",", dto.getBasicOptions()))
+                .additionalOption(String.join(",", dto.getAdditionalOptions()))
+
+                // 건물/편의
+                .building(dto.getBuilding())
+                .infoElevator(dto.isElevator())
+                .infoParking(dto.isParking())
+
+                // 가격
+                .roomLeastPay(dto.getLeastPay())
+                .roomDeposit(dto.getDeposit())
+                .roomRent(dto.getRent())
+                .roomAdministrationFee(dto.getAdministrationFee())
+                .roomPayOption(dto.getPayOption())
+
+                // 할인
+                .roomDiscount(dto.getDiscount())
+                .roomDiscountFee(dto.getDiscountFee())
+
+                // 이미지 (List<RoomImageRequest> → List<RoomImage>)
+                .imageList(
+                        dto.getImages() == null ? new ArrayList<>() :
+                                dto.getImages().stream()
+                                        .map(i -> new RoomImage(i.getImageName(), i.getOrd()))
+                                        .toList()
+                )
+
+                .build();
+    }
+
 }
 
    

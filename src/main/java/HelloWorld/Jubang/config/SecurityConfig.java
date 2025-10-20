@@ -1,5 +1,7 @@
 package HelloWorld.Jubang.config;
 
+import HelloWorld.Jubang.config.filter.XssFilter;
+import HelloWorld.Jubang.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity // Spring Security 설정을 활성화
 @Configuration
@@ -17,6 +20,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 @EnableMethodSecurity // @PreAuthorize, @Secured, @RolesAllowed 어노테이션 사용을 위해 필요
 public class SecurityConfig {
+
+    private final XssFilter xssFilter;
     
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -30,10 +35,13 @@ public class SecurityConfig {
         http.csrf(csrf->csrf.disable())
         .authorizeHttpRequests(
                 auth -> auth
-                        .requestMatchers("/api/v1/user/**").permitAll()
+                        .requestMatchers("/api/v1/user/**", "/api/v1/room/**").permitAll()
                         .anyRequest().authenticated()
         );
+
+        http.addFilterBefore(xssFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 }
+
