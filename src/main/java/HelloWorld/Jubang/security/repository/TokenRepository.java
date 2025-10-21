@@ -44,4 +44,12 @@ public class TokenRepository {
         redisTemplate.opsForValue().set(key, "logout", remainingTimeInMills, TimeUnit.MILLISECONDS);
         log.info("액세스 토큰 블랙리스트(로그아웃) 추가: {}", accessToken);
     }
+
+    /**
+     * 토큰이 블랙리스트에 있는지 확인
+     */
+    public boolean isBlacklisted(String accessToken) {
+        String key = BLACKLIST_PREFIX + accessToken;
+        return Boolean.TRUE.equals(redisTemplate.hasKey(key));
+    }
 }

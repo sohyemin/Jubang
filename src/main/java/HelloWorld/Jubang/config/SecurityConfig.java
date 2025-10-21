@@ -22,7 +22,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final XssFilter xssFilter;
-    
+    private final JWTCheckFilter jwtCheckFilter;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -39,8 +42,21 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
         );
 
+        // 필터 순서: XSS Filter → JWT Filter → UsernamePasswordAuthenticationFilter
+        // 1. XSS 필터를 가장 먼저 추가 (사용자 입력 검증)
         http.addFilterBefore(xssFilter, UsernamePasswordAuthenticationFilter.class);
 
+        // 2. JWT 필터를 UsernamePasswordAuthenticationFilter 이전에 추가 (인증 처리)
+        http.addFilterBefore(jwtCheckFilter, UsernamePasswordAuthenticationFilter.class);
+
+        // exception authenticationEntryPoint 추가 401 에러 처리
+        http.exceptionHandling(exception -> {
+            exception.authenticationEntryPoint(customAuthenticationEntryPoint);
+        });
+        // exceptionHandler, 접근 거부 핸들러 추가
+        http.exceptionHandling(config -> {
+            config.accessDeniedHandler(customAccessDeniedHandler);
+        });
         return http.build();
     }
 }

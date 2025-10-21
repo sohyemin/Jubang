@@ -82,4 +82,12 @@ public class TokenService {
             log.error("토큰 블랙리스트(로그아웃) 추가 중 오류: {}", e.getMessage());
         }
     }
+
+    /**
+     * 토큰 블랙리스트 확인
+     */
+    public boolean isTokenBlacklisted(String accessToken) {
+        return tokenRepository.isBlacklisted(accessToken);
+    }
+
 }
