@@ -3,6 +3,8 @@ package HelloWorld.Jubang.config.filter;
 import HelloWorld.Jubang.dto.Response;
 import HelloWorld.Jubang.security.service.TokenValidationService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,7 +42,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         // /api/member/로 시작하는 요청은 필터를 타지 않도록 설정
         if (path.startsWith("/api/v1/user/login") || path.startsWith("/api/v1/user/join")
                 || path.startsWith("/api/v1/user/check-email")
-                || path.startsWith("/api/v1/user/refresh") || path.startsWith("/api/v1/user/logout")
+                || path.startsWith("/api/v1/user/refresh")
 
         ) {
             return true;
@@ -90,26 +92,27 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         String autHeaderStr = request.getHeader("Authorization");
         log.info("autHeaderStr Authorization: {}", autHeaderStr);
 
-        if ((Objects.equals(autHeaderStr, "Bearer null") || (autHeaderStr == null)) && (
-                request.getServletPath().startsWith("/api/v1/room/")
-
-
-        )) {
+        if ((Objects.equals(autHeaderStr, "Bearer null") || (autHeaderStr == null)) &&
+                request.getServletPath().startsWith("/api/v1/room/")) {
             filterChain.doFilter(request, response);
             return;
         }
 
         try {
             String token = autHeaderStr.substring(7);
-
-            // TokenValidationService를 사용하여 인증
             Authentication authentication = tokenValidationService.validateTokenAndCreateAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
             filterChain.doFilter(request, response);
+        } catch (ExpiredJwtException e) {
+            log.error("JWT expired");
+            // ❗여기서 직접 바디 쓰지 말고 entry point로 넘기는 게 깔끔
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        } catch (JwtException e) {
+            log.error("JWT invalid: {}", e.getMessage());
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         } catch (Exception e) {
-            log.error("JWT Check Error: {}", e.getMessage());
-            handleAuthenticationError(response, e);
+            log.error("JWT processing error: {}", e.getMessage());
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
     }
 

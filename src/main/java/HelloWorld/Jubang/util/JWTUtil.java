@@ -37,7 +37,7 @@ public class JWTUtil {
                 .setHeader(Map.of("typ", "JWT"))
                 .setClaims(valueMap)
                 .setIssuedAt(Date.from(ZonedDateTime.now().toInstant()))
-                .setExpiration(Date.from(ZonedDateTime.now().toInstant()))
+                .setExpiration(Date.from(ZonedDateTime.now().plusMinutes(min).toInstant()))
                 .signWith(key)
                 .compact();
     }

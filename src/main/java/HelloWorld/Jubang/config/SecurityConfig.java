@@ -2,7 +2,6 @@ package HelloWorld.Jubang.config;
 
 import HelloWorld.Jubang.config.filter.JWTCheckFilter;
 import HelloWorld.Jubang.config.filter.XssFilter;
-import HelloWorld.Jubang.domain.user.entity.User;
 import HelloWorld.Jubang.security.handler.CustomAccessDeniedHandler;
 import HelloWorld.Jubang.security.handler.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
@@ -51,10 +50,10 @@ public class SecurityConfig {
         .cors(withDefaults())
         .authorizeHttpRequests(
                 auth -> auth
-                        .requestMatchers("/api/v1/user/**").permitAll()
-                        .requestMatchers("/api/v1/room/**").permitAll()
-                        // WebSocket handshake만 허용 ,초기 http 연결이 필요하므로 권한 허용을 해주어야 함( 자세히 보면 엔드포인트가 다릅니다)
-                        .requestMatchers("/wss-stomp/**").permitAll()
+                        .requestMatchers("/api/v1/user/join", "/api/v1/user/login", "/api/v1/user/check-email", "/api/v1/user/refresh").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**", "/health", "/favicon.ico", "/static/**").permitAll()
+                        .requestMatchers("/api/v1/user/logout").authenticated()
+                        .requestMatchers("/api/v1/room/**").authenticated()
                         .anyRequest().authenticated()
         );
 
