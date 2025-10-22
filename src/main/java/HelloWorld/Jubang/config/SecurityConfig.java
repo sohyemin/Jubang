@@ -12,10 +12,19 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @EnableWebSecurity // Spring Security 설정을 활성화
 @Configuration
@@ -39,11 +48,26 @@ public class SecurityConfig {
         log.info("security config");
 
         http.csrf(csrf->csrf.disable())
+        .cors(withDefaults())
         .authorizeHttpRequests(
                 auth -> auth
-                        .requestMatchers("/api/v1/user/**", "/api/v1/room/**").permitAll()
+                        .requestMatchers("/api/v1/user/**").permitAll()
+                        .requestMatchers("/api/v1/room/**").permitAll()
+                        // WebSocket handshake만 허용 ,초기 http 연결이 필요하므로 권한 허용을 해주어야 함( 자세히 보면 엔드포인트가 다릅니다)
+                        .requestMatchers("/wss-stomp/**").permitAll()
                         .anyRequest().authenticated()
         );
+
+        http.cors(httpSecurityCorsConfigurer -> {
+            httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource());
+        });
+
+        http.sessionManagement(sessionConfig -> {
+            sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        });
+
+        http.csrf(AbstractHttpConfigurer::disable); // CSRF 보호 기능이 끎 REST API에서는 일반적으로 CSRF 보호가 필요하지 않음
+
 
         // 필터 순서: XSS Filter → JWT Filter → UsernamePasswordAuthenticationFilter
         // 1. XSS 필터를 가장 먼저 추가 (사용자 입력 검증)
@@ -61,6 +85,29 @@ public class SecurityConfig {
             config.accessDeniedHandler(customAccessDeniedHandler);
         });
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        // 출처 설정 (모든 출처 허용)
+//        configuration.setAllowedOriginPatterns(Arrays.asList("*"));  // localhost:3000 -> 허용
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:3001"
+        ));
+        // 허용할 메서드 설정
+        configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        // 허용할 헤더 설정
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+        // 자격 증명 허용 설정 (쿠키 등)
+        configuration.setAllowCredentials(true);
+        // content-disposition 허용 설정 -> excel 파일 다운로드시, 제목노출을 위해 필요!
+        configuration.setExposedHeaders(Arrays.asList("Content-Disposition"));
+        // CORS 설정을 특정 경로에 적용
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+
+        return source;
     }
 }
 

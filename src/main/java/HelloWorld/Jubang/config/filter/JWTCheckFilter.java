@@ -38,9 +38,9 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             return true;
         }
         // /api/member/로 시작하는 요청은 필터를 타지 않도록 설정
-        if (path.startsWith("/api/v1/member/login") || path.startsWith("/api/v1/member/join")
-                || path.startsWith("/api/v1/member/check-email")
-                || path.startsWith("/api/v1/member/refresh") || path.startsWith("/api/v1/member/logout")
+        if (path.startsWith("/api/v1/user/login") || path.startsWith("/api/v1/user/join")
+                || path.startsWith("/api/v1/user/check-email")
+                || path.startsWith("/api/v1/user/refresh") || path.startsWith("/api/v1/user/logout")
 
         ) {
             return true;
@@ -91,7 +91,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         log.info("autHeaderStr Authorization: {}", autHeaderStr);
 
         if ((Objects.equals(autHeaderStr, "Bearer null") || (autHeaderStr == null)) && (
-                request.getServletPath().startsWith("/api/v1/post/")
+                request.getServletPath().startsWith("/api/v1/room/")
 
 
         )) {

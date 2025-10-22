@@ -20,10 +20,7 @@ public class XssFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
 
         // 로그인, 회원가입 등 인증 관련 API는 XSS 필터 제외
-        return path.startsWith("/api/v1/user/login") ||
-                path.startsWith("/api/v1/user/join") ||
-                path.startsWith("/api/v1/user/refresh") ||
-                path.startsWith("/api/v1/user/logout") ||
+        return path.startsWith("/api/v1/user/") ||
                 path.startsWith("/swagger-ui/") ||
                 request.getMethod().equals("OPTIONS"); // CORS preflight 제외
     }
