@@ -1,7 +1,10 @@
 package HelloWorld.Jubang.config;
 
+import HelloWorld.Jubang.config.filter.JWTCheckFilter;
 import HelloWorld.Jubang.config.filter.XssFilter;
 import HelloWorld.Jubang.domain.user.entity.User;
+import HelloWorld.Jubang.security.handler.CustomAccessDeniedHandler;
+import HelloWorld.Jubang.security.handler.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
