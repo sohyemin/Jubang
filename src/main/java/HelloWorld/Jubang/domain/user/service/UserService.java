@@ -13,4 +13,7 @@ public interface UserService {
     // 로그인
     LoginResponseDTO login(String email, String password);
 
+    // 탈퇴
+    void deleteUser(String email);
+
 }

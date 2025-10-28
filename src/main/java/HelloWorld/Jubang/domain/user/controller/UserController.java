@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -85,24 +86,16 @@ public class UserController {
         return Response.success("Logout successful");
     }
 
+    @DeleteMapping
+    public ResponseEntity<String> deleteUser(@AuthenticationPrincipal UserDTO userDTO) {
+        userService.deleteMember
+    }
+
     private String extractAccessToken(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             return authHeader.substring(7);
         }
         return null;
-    }
-
-    @PostMapping("/logout")
-    public Response<String> logout(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            @RequestParam(required = false, defaultValue = "web") String clientType,
-            @AuthenticationPrincipal UserDTO userDTO){
-
-        log.info("log request:{}, clientType:{}", userDTO, clientType);
-
-        //액세스 토큰 추출
-
     }
 }

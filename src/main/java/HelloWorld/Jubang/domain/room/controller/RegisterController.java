@@ -29,9 +29,22 @@ public class RegisterController {
         return Response.success("등록되었습니다.");
     }
 
+    /**
+        페이징 처리 필요... 우카냐
+     */
     // 방 목록 보기
     @GetMapping("/list")
     public Response<List<RoomListResponse>> list(){
         return null;
+    }
+
+    // 수정
+    @PutMapping("/{roomId}")
+    public Response<String> modify(@PathVariable Long roomID, @Valid RoomModifyRequest request,
+                                   @AuthenticationPrincipal UserDTO userDTO) {
+        log.info("Room modify request: {}", request);
+        log.info("UserDto: {}", userDTO);
+        Long result = registerService.modify(roomID, request, userDTO.getEmail());
+        return Response.success("수정 되었습니다. roomId: " + result);
     }
 }

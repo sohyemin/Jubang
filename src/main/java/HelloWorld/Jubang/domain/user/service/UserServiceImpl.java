@@ -64,10 +64,13 @@ public class UserServiceImpl implements UserService{
         return tokenService.issueTokens(user);
     }
 
+    @Override
+    public void deleteUser(String email) {
+        userRepository.deleteByEmail(email);
+    }
+
     public User getEntity(String email) {
         return userRepository.getWithRoles(email)
                 .orElseThrow(() -> new EntityNotFoundException("해당하는 회원이 없습니다. email: " + email));
     }
-
-
 }
