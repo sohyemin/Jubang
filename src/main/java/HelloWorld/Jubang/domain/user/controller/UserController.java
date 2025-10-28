@@ -3,6 +3,7 @@ package HelloWorld.Jubang.domain.user.controller;
 import HelloWorld.Jubang.domain.user.dto.JoinRequestDTO;
 import HelloWorld.Jubang.domain.user.dto.LoginRequestDTO;
 import HelloWorld.Jubang.domain.user.dto.LoginResponseDTO;
+import HelloWorld.Jubang.domain.user.entity.User;
 import HelloWorld.Jubang.domain.user.service.UserService;
 import HelloWorld.Jubang.dto.Response;
 import HelloWorld.Jubang.props.JwtProps;
@@ -90,5 +91,18 @@ public class UserController {
             return authHeader.substring(7);
         }
         return null;
+    }
+
+    @PostMapping("/logout")
+    public Response<String> logout(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @RequestParam(required = false, defaultValue = "web") String clientType,
+            @AuthenticationPrincipal UserDTO userDTO){
+
+        log.info("log request:{}, clientType:{}", userDTO, clientType);
+
+        //액세스 토큰 추출
+
     }
 }
