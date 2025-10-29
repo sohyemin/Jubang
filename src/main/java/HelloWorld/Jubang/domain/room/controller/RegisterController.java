@@ -2,6 +2,7 @@ package HelloWorld.Jubang.domain.room.controller;
 
 import HelloWorld.Jubang.domain.room.dto.RegisterRequestDto;
 import HelloWorld.Jubang.domain.room.dto.RoomListResponse;
+import HelloWorld.Jubang.domain.room.dto.RoomModifyRequest;
 import HelloWorld.Jubang.domain.room.service.RegisterService;
 import HelloWorld.Jubang.dto.Response;
 import HelloWorld.Jubang.security.UserDTO;
@@ -36,6 +37,14 @@ public class RegisterController {
     @GetMapping("/list")
     public Response<List<RoomListResponse>> list(){
         return null;
+    }
+
+    // 방 디테일 보기
+    @GetMapping("/room/{roomId}")
+    public Response<String> roomDetail(@PathVariable Long roomId){
+
+
+        return Response.success("상세 정보 불러오기 성공. roomId: " + roomId);
     }
 
     // 수정

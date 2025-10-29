@@ -87,8 +87,10 @@ public class UserController {
     }
 
     @DeleteMapping
-    public ResponseEntity<String> deleteUser(@AuthenticationPrincipal UserDTO userDTO) {
-        userService.deleteMember
+    public Response<?> deleteUser(@AuthenticationPrincipal UserDTO userDTO) {
+        userService.deleteUser(userDTO.getEmail());
+
+        return Response.success("Delete user successful");
     }
 
     private String extractAccessToken(HttpServletRequest request) {
