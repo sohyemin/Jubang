@@ -49,11 +49,19 @@ public class RegisterController {
 
     // 수정
     @PutMapping("/{roomId}")
-    public Response<String> modify(@PathVariable Long roomID, @Valid RoomModifyRequest request,
+    public Response<String> modify(@PathVariable Long roomId, @Valid RoomModifyRequest request,
                                    @AuthenticationPrincipal UserDTO userDTO) {
         log.info("Room modify request: {}", request);
         log.info("UserDto: {}", userDTO);
-        Long result = registerService.modify(roomID, request, userDTO.getEmail());
+        Long result = registerService.modify(roomId, request, userDTO.getEmail());
         return Response.success("수정 되었습니다. roomId: " + result);
+    }
+
+    // 삭제
+    @PostMapping("/{roomId}")
+    public Response<?> deleteRoom(@PathVariable Long roomId, @AuthenticationPrincipal UserDTO userDTO) {
+        registerService.deleteRoom(roomId, userDTO.getEmail());
+
+        return Response.success("Delete user successful");
     }
 }

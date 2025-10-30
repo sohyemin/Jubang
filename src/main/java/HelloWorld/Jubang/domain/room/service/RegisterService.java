@@ -3,6 +3,7 @@ package HelloWorld.Jubang.domain.room.service;
 import HelloWorld.Jubang.domain.room.dto.RegisterRequestDto;
 import HelloWorld.Jubang.domain.room.dto.RoomDetailResponse;
 import HelloWorld.Jubang.domain.room.dto.RoomModifyRequest;
+import HelloWorld.Jubang.security.UserDTO;
 
 import java.util.List;
 
@@ -16,14 +17,14 @@ public interface RegisterService {
     //방 전체 목록
     List<RoomDetailResponse> listAllRoom();
     //방 디테일
-    RoomDetailResponse detailRoom(int roomNo);
+    RoomDetailResponse detailRoom(long roomNo);
 
     /** UPDATE **/
     //방 정보 수정
-    void modify(Long roomId, RoomModifyRequest request, String email);
+    long modify(long roomId, RoomModifyRequest request, String email);
 
     /** DELETE **/
     //방 삭제
-    void deleteRoom(int roomNo);
+    void deleteRoom(long roomId, String email);
 
 }

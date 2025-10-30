@@ -8,6 +8,7 @@ import HelloWorld.Jubang.domain.room.repository.RegisterRepository;
 import HelloWorld.Jubang.domain.user.entity.User;
 import HelloWorld.Jubang.domain.user.repository.UserRepository;
 import HelloWorld.Jubang.exception.CustomException;
+import HelloWorld.Jubang.security.UserDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,7 +24,7 @@ import static HelloWorld.Jubang.exception.ErrorCode.ROOM_NOT_FOUND;
 @Service
 @Transactional(readOnly = false)
 @RequiredArgsConstructor
-public class RegisterServiceImpl implements RegisterService{
+public class RegisterServiceImpl implements RegisterService {
 
     private final RegisterRepository registerRepository;
     private final UserRepository userRepository;
@@ -41,12 +42,12 @@ public class RegisterServiceImpl implements RegisterService{
     }
 
     @Override
-    public RoomDetailResponse detailRoom(int roomNo) {
+    public RoomDetailResponse detailRoom(long roomNo) {
         return null;
     }
 
     @Override
-    public void modify(Long roomId, RoomModifyRequest request, String email) {
+    public long modify(long roomId, RoomModifyRequest request, String email) {
 
         Room room = getEntity(roomId);
         User user = getUser(email);
@@ -60,13 +61,17 @@ public class RegisterServiceImpl implements RegisterService{
 
         // 게시글 수정 로직
 
-
-
+        return room.getRoomId();
     }
 
     @Override
-    public void deleteRoom(int roomNo) {
+    public void deleteRoom(long roomId, String email) {
+        Room room = getEntity(roomId);
+        User user = getUser(email);
+        // 방 등록 유저와 요청한 유저가 일치하는지 확인
+        checkRoomRegisteredEqual(room, user);
 
+        registerRepository.deleteById(roomId);
     }
 
     private void checkRoomRegisteredEqual(Room room, User user) {
@@ -85,6 +90,6 @@ public class RegisterServiceImpl implements RegisterService{
 
     private Room getEntity(Long roomId) {
         return registerRepository.findById(roomId)
-                .orElseThrow(() -> new CustomException(ROOM_NOT_FOUND, String.format("room not found with id")));
+                .orElseThrow(() -> new CustomException(ROOM_NOT_FOUND, String.format("room not founded")));
     }
 }
