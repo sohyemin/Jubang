@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -51,9 +52,12 @@ public class SecurityConfig {
         .authorizeHttpRequests(
                 auth -> auth
                         .requestMatchers("/api/v1/user/join", "/api/v1/user/login", "/api/v1/user/check-email", "/api/v1/user/refresh").permitAll()
+                        .requestMatchers(HttpMethod.GET,   "/api/v1/room/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**", "/health", "/favicon.ico", "/static/**").permitAll()
                         .requestMatchers("/api/v1/user/logout").authenticated()
-                        .requestMatchers("/api/v1/room/**").authenticated()
+                        .requestMatchers(HttpMethod.POST,   "/api/v1/room/**").authenticated()
+                        .requestMatchers(HttpMethod.PATCH,  "/api/v1/room/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/room/**").authenticated()
                         .anyRequest().authenticated()
         );
 

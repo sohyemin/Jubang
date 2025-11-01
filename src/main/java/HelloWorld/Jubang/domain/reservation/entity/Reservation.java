@@ -2,16 +2,14 @@ package HelloWorld.Jubang.domain.reservation.entity;
 
 import HelloWorld.Jubang.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
-@Entity
-@Slf4j
-@NoArgsConstructor
-@RequiredArgsConstructor
+@Builder
+@AllArgsConstructor
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class Reservation {
 
     @Id
@@ -27,3 +25,4 @@ public class Reservation {
 
 
 }
+

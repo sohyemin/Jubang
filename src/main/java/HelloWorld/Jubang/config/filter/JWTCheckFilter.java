@@ -92,8 +92,10 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         String autHeaderStr = request.getHeader("Authorization");
         log.info("autHeaderStr Authorization: {}", autHeaderStr);
 
-        if ((Objects.equals(autHeaderStr, "Bearer null") || (autHeaderStr == null)) &&
-                request.getServletPath().startsWith("/api/v1/room/")) {
+        if (autHeaderStr == null || !autHeaderStr.startsWith("Bearer ")) {
+
+            log.info("[JWT] No Bearer → pass. method={}, uri={}", request.getMethod(), request.getRequestURI());
+
             filterChain.doFilter(request, response);
             return;
         }

@@ -40,7 +40,7 @@ public class RegisterController {
     }
 
     // 방 디테일 보기
-    @GetMapping("/room/{roomId}")
+    @GetMapping("/{roomId}")
     public Response<String> roomDetail(@PathVariable Long roomId){
 
 

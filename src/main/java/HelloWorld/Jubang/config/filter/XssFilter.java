@@ -19,6 +19,9 @@ public class XssFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
 
+        // 방 조회 GET은 XSS 필터 제외
+        if ("GET".equalsIgnoreCase(request.getMethod()) && path.startsWith("/api/v1/room/")) return true;
+
         // 로그인, 회원가입 등 인증 관련 API는 XSS 필터 제외
         return path.startsWith("/api/v1/user/") ||
                 path.startsWith("/swagger-ui/") ||
