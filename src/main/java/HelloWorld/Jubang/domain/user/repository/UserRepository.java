@@ -3,6 +3,7 @@ package HelloWorld.Jubang.domain.user.repository;
 import HelloWorld.Jubang.domain.user.entity.User;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -17,6 +18,7 @@ public interface UserRepository extends JpaRepository<User, String> {
     @Query("select u from User u where u.email = :email")
     Optional<User> findByEmail(@Param("email") String email);
 
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("delete from User u where u.email = :email")
-    void deleteByEmail(@Param("email") String email);
+    int deleteByEmail(@Param("email") String email);
 }

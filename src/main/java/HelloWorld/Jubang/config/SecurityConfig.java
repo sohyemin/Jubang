@@ -55,6 +55,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,   "/api/v1/room/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**", "/health", "/favicon.ico", "/static/**").permitAll()
                         .requestMatchers("/api/v1/user/logout").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/user").authenticated()
                         .requestMatchers(HttpMethod.POST,   "/api/v1/room/**").authenticated()
                         .requestMatchers(HttpMethod.PATCH,  "/api/v1/room/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/room/**").authenticated()
