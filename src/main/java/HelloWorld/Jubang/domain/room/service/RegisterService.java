@@ -17,14 +17,14 @@ public interface RegisterService {
     //방 전체 목록
     List<RoomDetailResponse> listAllRoom();
     //방 디테일
-    RoomDetailResponse detailRoom(long roomNo);
+    RoomDetailResponse detailRoom(Long roomId);
 
     /** UPDATE **/
     //방 정보 수정
-    long modify(long roomId, RoomModifyRequest request, String email);
+    Long modify(Long roomId, RoomModifyRequest request, String email);
 
     /** DELETE **/
     //방 삭제
-    void deleteRoom(long roomId, String email);
+    void deleteRoom(Long roomId, String email);
 
 }

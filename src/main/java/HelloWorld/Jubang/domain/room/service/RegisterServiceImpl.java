@@ -42,12 +42,12 @@ public class RegisterServiceImpl implements RegisterService {
     }
 
     @Override
-    public RoomDetailResponse detailRoom(long roomNo) {
+    public RoomDetailResponse detailRoom(Long roomNo) {
         return null;
     }
 
     @Override
-    public long modify(long roomId, RoomModifyRequest request, String email) {
+    public Long modify(Long roomId, RoomModifyRequest request, String email) {
 
         Room room = getEntity(roomId);
         User user = getUser(email);
@@ -65,7 +65,7 @@ public class RegisterServiceImpl implements RegisterService {
     }
 
     @Override
-    public void deleteRoom(long roomId, String email) {
+    public void deleteRoom(Long roomId, String email) {
         Room room = getEntity(roomId);
         User user = getUser(email);
         // 방 등록 유저와 요청한 유저가 일치하는지 확인
