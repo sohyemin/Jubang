@@ -20,5 +20,5 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("delete from User u where u.email = :email")
-    int deleteByEmail(@Param("email") String email);
+    void deleteByEmail(@Param("email") String email);
 }
