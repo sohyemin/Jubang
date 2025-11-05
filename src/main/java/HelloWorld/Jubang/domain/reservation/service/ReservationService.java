@@ -8,7 +8,7 @@ import java.util.List;
 public interface ReservationService {
 
     // 예약
-    void makeReservation(ReservationRequestDto requestDto);
+    void makeReservation(ReservationRequestDto requestDto, String email);
 
     // 예약 정보 - 호스트
     List<ReservationDetailResponse> getAllReservations_ForHost();

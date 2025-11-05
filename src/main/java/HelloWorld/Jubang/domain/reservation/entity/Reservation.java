@@ -1,5 +1,6 @@
 package HelloWorld.Jubang.domain.reservation.entity;
 
+import HelloWorld.Jubang.domain.reservation.dto.ReservationRequestDto;
 import HelloWorld.Jubang.domain.reservation.enums.PayMethod;
 import HelloWorld.Jubang.domain.reservation.enums.RsvStatus;
 import HelloWorld.Jubang.domain.room.entity.Room;
@@ -33,6 +34,7 @@ public class Reservation {
     // 예약자 정보
     private String rsvName;
     private String rsvHP;
+    private int people;
 
     // 일정
     private LocalDate checkIn;
@@ -48,5 +50,20 @@ public class Reservation {
     @Enumerated(EnumType.STRING)
     private RsvStatus status;   //예약 상태
 
-}
+    @Builder
+    public static Reservation from(ReservationRequestDto dto, User user, Room room) {
+        return Reservation.builder()
+                .user(user)
+                .room(room)
+                .rsvName(dto.getRsvName())
+                .rsvHP(dto.getRsvHP())
+                .people(dto.getPeople())
+                .checkIn(dto.getCheckIn())
+                .checkOut(dto.getCheckOut())
+                .totalPay(dto.getTotalPay())
+                .payMethod(PayMethod.valueOf(dto.getPayMethod()))
+                .status(RsvStatus.PENDING)
+                .build();
+    }
 
+}
