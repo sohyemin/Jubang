@@ -11,6 +11,7 @@ import HelloWorld.Jubang.domain.user.repository.UserRepository;
 import HelloWorld.Jubang.exception.CustomException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.List;
 
 import static HelloWorld.Jubang.exception.ErrorCode.ROOM_NOT_FOUND;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -32,7 +34,7 @@ public class ReservationServiceImpl implements ReservationService {
         User user = getUser(email);
         Room room = getEntity(requestDto.getRoomId());
 
-        Reservation savRsv = reservationRepository.save(Reservation.from(requestDto, user, room));
+        Reservation saveRsv = reservationRepository.save(Reservation.from(requestDto, user, room));
     }
 
     @Override
