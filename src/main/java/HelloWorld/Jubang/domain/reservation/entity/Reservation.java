@@ -48,6 +48,5 @@ public class Reservation {
     @Enumerated(EnumType.STRING)
     private RsvStatus status;   //예약 상태
 
-
 }
 
