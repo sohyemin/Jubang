@@ -2,6 +2,7 @@ package HelloWorld.Jubang.domain.reservation.service;
 
 import HelloWorld.Jubang.domain.reservation.dto.ReservationDetailResponse;
 import HelloWorld.Jubang.domain.reservation.dto.ReservationRequestDto;
+import HelloWorld.Jubang.domain.reservation.dto.ReservationResponse;
 import HelloWorld.Jubang.domain.reservation.entity.Reservation;
 import HelloWorld.Jubang.domain.reservation.repository.ReservationRepository;
 import HelloWorld.Jubang.domain.room.entity.Room;
@@ -10,11 +11,13 @@ import HelloWorld.Jubang.domain.room.service.RegisterService;
 import HelloWorld.Jubang.domain.user.entity.User;
 import HelloWorld.Jubang.domain.user.repository.UserRepository;
 import HelloWorld.Jubang.exception.CustomException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,14 +25,13 @@ import static HelloWorld.Jubang.exception.ErrorCode.ROOM_NOT_FOUND;
 
 @Slf4j
 @Service
-@Transactional
+@Transactional(readOnly = false)
 @RequiredArgsConstructor
 public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final UserRepository userRepository;
     private final RegisterRepository registerRepository;
-    private final RegisterService registerService;
 
     @Override
     public void makeReservation(ReservationRequestDto requestDto, String email) {
@@ -39,13 +41,13 @@ public class ReservationServiceImpl implements ReservationService {
         Reservation saveRsv = reservationRepository.save(Reservation.from(requestDto, user, room));
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public List<ReservationDetailResponse> getAllReservations_ForHost(String email) {
-        User user = getUser(email);
-//        Room room = registerService.listAllRoom();
+    public Page<ReservationResponse> getAllReservations_ForHost(String email, Pageable pageable) {
 
+        return reservationRepository.findAllByHostId(email, pageable)
+                .map(ReservationResponse::toDto);
 
-        return List.of();
     }
 
     @Override

@@ -2,6 +2,9 @@ package HelloWorld.Jubang.domain.reservation.service;
 
 import HelloWorld.Jubang.domain.reservation.dto.ReservationDetailResponse;
 import HelloWorld.Jubang.domain.reservation.dto.ReservationRequestDto;
+import HelloWorld.Jubang.domain.reservation.dto.ReservationResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -11,7 +14,7 @@ public interface ReservationService {
     void makeReservation(ReservationRequestDto requestDto, String email);
 
     // 예약 정보 - 호스트
-    List<ReservationDetailResponse> getAllReservations_ForHost(String email);
+    Page<ReservationResponse> getAllReservations_ForHost(String email, Pageable pageable);
     ReservationDetailResponse getReservation_ForHost(String email);
 
     // 예약 정보 - 사용자

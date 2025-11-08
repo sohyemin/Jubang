@@ -48,6 +48,11 @@ public class RegisterServiceImpl implements RegisterService {
     }
 
     @Override
+    public List<RoomDetailResponse> listAllRoomforHost() {
+        return List.of();
+    }
+
+    @Override
     public Long modify(Long roomId, RoomModifyRequest request, String email) {
 
         Room room = getEntity(roomId);
