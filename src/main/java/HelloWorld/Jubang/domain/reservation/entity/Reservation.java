@@ -1,5 +1,6 @@
 package HelloWorld.Jubang.domain.reservation.entity;
 
+import HelloWorld.Jubang.domain.BaseTimeEntity;
 import HelloWorld.Jubang.domain.reservation.dto.ReservationRequestDto;
 import HelloWorld.Jubang.domain.reservation.enums.PayMethod;
 import HelloWorld.Jubang.domain.reservation.enums.RsvStatus;
@@ -16,7 +17,7 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Reservation {
+public class Reservation extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,6 +50,8 @@ public class Reservation {
 
     @Enumerated(EnumType.STRING)
     private RsvStatus status;   //예약 상태
+
+
 
     @Builder
     public static Reservation from(ReservationRequestDto dto, User user, Room room) {

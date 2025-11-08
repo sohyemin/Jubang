@@ -18,6 +18,8 @@ public interface RegisterService {
     List<RoomDetailResponse> listAllRoom();
     //방 디테일
     RoomDetailResponse detailRoom(Long roomId);
+    // host의 방 목록
+    List<RoomDetailResponse> listAllRoomforHost();
 
     /** UPDATE **/
     //방 정보 수정

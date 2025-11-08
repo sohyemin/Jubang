@@ -1,5 +1,6 @@
 package HelloWorld.Jubang.domain.room.entity;
 
+import HelloWorld.Jubang.domain.BaseTimeEntity;
 import HelloWorld.Jubang.domain.room.dto.RegisterRequestDto;
 import HelloWorld.Jubang.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -14,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "room")
-public class Room {
+public class Room extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

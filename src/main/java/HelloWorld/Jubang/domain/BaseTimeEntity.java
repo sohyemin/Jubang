@@ -1,4 +1,4 @@
-package HelloWorld.Jubang.domain.user;
+package HelloWorld.Jubang.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

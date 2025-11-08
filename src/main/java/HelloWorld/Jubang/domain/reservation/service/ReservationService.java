@@ -11,13 +11,12 @@ public interface ReservationService {
     void makeReservation(ReservationRequestDto requestDto, String email);
 
     // 예약 정보 - 호스트
-    List<ReservationDetailResponse> getAllReservations_ForHost();
-    ReservationDetailResponse getReservation_ForHost();
+    List<ReservationDetailResponse> getAllReservations_ForHost(String email);
+    ReservationDetailResponse getReservation_ForHost(String email);
 
     // 예약 정보 - 사용자
-    List<ReservationDetailResponse> getAllReservations();
-    ReservationDetailResponse getReservation();
-
+    List<ReservationDetailResponse> getAllReservations(String email);
+    ReservationDetailResponse getReservation(String email);
 
     // 예약 취소
     void canselReservation(Long rsvId, String email);

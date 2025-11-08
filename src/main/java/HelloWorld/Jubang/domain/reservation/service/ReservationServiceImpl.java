@@ -6,6 +6,7 @@ import HelloWorld.Jubang.domain.reservation.entity.Reservation;
 import HelloWorld.Jubang.domain.reservation.repository.ReservationRepository;
 import HelloWorld.Jubang.domain.room.entity.Room;
 import HelloWorld.Jubang.domain.room.repository.RegisterRepository;
+import HelloWorld.Jubang.domain.room.service.RegisterService;
 import HelloWorld.Jubang.domain.user.entity.User;
 import HelloWorld.Jubang.domain.user.repository.UserRepository;
 import HelloWorld.Jubang.exception.CustomException;
@@ -28,6 +29,7 @@ public class ReservationServiceImpl implements ReservationService {
     private final ReservationRepository reservationRepository;
     private final UserRepository userRepository;
     private final RegisterRepository registerRepository;
+    private final RegisterService registerService;
 
     @Override
     public void makeReservation(ReservationRequestDto requestDto, String email) {
@@ -38,22 +40,26 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List<ReservationDetailResponse> getAllReservations_ForHost() {
+    public List<ReservationDetailResponse> getAllReservations_ForHost(String email) {
+        User user = getUser(email);
+//        Room room = registerService.listAllRoom();
+
+
         return List.of();
     }
 
     @Override
-    public ReservationDetailResponse getReservation_ForHost() {
+    public ReservationDetailResponse getReservation_ForHost(String email) {
         return null;
     }
 
     @Override
-    public List<ReservationDetailResponse> getAllReservations() {
+    public List<ReservationDetailResponse> getAllReservations(String email) {
         return List.of();
     }
 
     @Override
-    public ReservationDetailResponse getReservation() {
+    public ReservationDetailResponse getReservation(String email) {
         return null;
     }
 

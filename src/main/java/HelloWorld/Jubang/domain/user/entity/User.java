@@ -1,5 +1,6 @@
 package HelloWorld.Jubang.domain.user.entity;
 
+import HelloWorld.Jubang.domain.BaseTimeEntity;
 import HelloWorld.Jubang.domain.user.dto.JoinRequestDTO;
 import HelloWorld.Jubang.domain.user.enums.UserRole;
 import jakarta.persistence.*;
@@ -14,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "user")
-public class User {
+public class User extends BaseTimeEntity {
 
     @Id
     private String email;
