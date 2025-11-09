@@ -24,6 +24,7 @@ public class ReservationResponse {
 
     public static ReservationResponse toDto(Reservation reservation) {
         return ReservationResponse.builder()
+                .rsvId(reservation.getRsvId())
                 .roomName(reservation.getRoom().getRoomName())
                 .checkIn(reservation.getCheckIn())
                 .checkOut(reservation.getCheckOut())

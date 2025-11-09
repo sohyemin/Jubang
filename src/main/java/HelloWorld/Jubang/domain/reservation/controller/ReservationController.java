@@ -33,9 +33,14 @@ public class ReservationController {
 
     @GetMapping("/host/list/page")
     public Response<Page<ReservationResponse>> hostPage1(
-            @PageableDefault(page = 1, size = 10, direction = Sort.Direction.DESC, sort = "rsvId") Pageable pageable,
+            @PageableDefault(page = 0, size = 10, direction = Sort.Direction.DESC, sort = "rsvId") Pageable pageable,
             @AuthenticationPrincipal UserDTO userDTO
     ) {
-        return Response.success(reservationService.getAllReservations_ForHost(userDTO.getEmail(), pageable));
+
+        Page<ReservationResponse> result = reservationService.getAllReservations_ForHost(userDTO.getEmail(), pageable);
+
+        log.info("result : "+result.toString());
+
+        return Response.success(result);
     }
 }
