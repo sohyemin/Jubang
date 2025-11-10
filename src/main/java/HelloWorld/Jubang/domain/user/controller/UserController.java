@@ -36,6 +36,12 @@ public class UserController {
         return Response.success("등록 되었습니다. email: " + joinRequestDto.getEmail());
     }
 
+    @PostMapping("/check-email?email={email}}")
+    public Response<?> checkEmail(@PathVariable String email){
+        log.info("Check email : {}", email);
+        userService.checkEmail(email);
+    }
+
     @PostMapping("/login")
     public Response<LoginResponseDTO> login(
             @Valid @RequestBody LoginRequestDTO loginRequestDTO,

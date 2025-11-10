@@ -16,4 +16,6 @@ public interface UserService {
     // 탈퇴
     void deleteUser(String email);
 
+    // 이메일 확인
+    void checkEmail(String email);
 }
