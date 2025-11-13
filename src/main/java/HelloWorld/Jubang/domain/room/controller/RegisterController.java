@@ -16,14 +16,14 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/room")
+@RequestMapping("/api/v1/rooms")
 @RequiredArgsConstructor
 public class RegisterController {
 
     private final RegisterService registerService;
 
     // 등록
-    @PostMapping("/register")
+    @PostMapping("")
     public Response<?> registerRoom(@Valid @RequestBody RegisterRequestDto requestDto,
                                     @AuthenticationPrincipal UserDTO userDTO){
         registerService.insertRoom(requestDto, userDTO.getEmail());
@@ -34,7 +34,7 @@ public class RegisterController {
         페이징 처리 필요... 우카냐
      */
     // 방 목록 보기
-    @GetMapping("/list")
+    @GetMapping("")
     public Response<List<RoomListResponse>> list(){
         return null;
     }
@@ -58,7 +58,7 @@ public class RegisterController {
     }
 
     // 삭제
-    @PostMapping("/{roomId}")
+    @DeleteMapping("/{roomId}")
     public Response<?> deleteRoom(@PathVariable Long roomId, @AuthenticationPrincipal UserDTO userDTO) {
         registerService.deleteRoom(roomId, userDTO.getEmail());
 

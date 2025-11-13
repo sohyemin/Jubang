@@ -3,8 +3,6 @@ package HelloWorld.Jubang.domain.user.service;
 import HelloWorld.Jubang.domain.user.dto.JoinRequestDTO;
 import HelloWorld.Jubang.domain.user.dto.LoginResponseDTO;
 
-import java.util.Map;
-
 public interface UserService {
 
     // 가입
@@ -17,5 +15,5 @@ public interface UserService {
     void deleteUser(String email);
 
     // 이메일 확인
-    void checkEmail(String email);
+    boolean checkEmail(String email);
 }

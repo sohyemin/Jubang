@@ -34,6 +34,16 @@ public class UserServiceImpl implements UserService{
     @Override
     public void join(JoinRequestDTO request) {
 
+
+        try{
+            userRepository.findByEmail(request.getEmail())
+                    .ifPresent(user -> {
+                        throw new IllegalArgumentException("이미 존재하는 회원입니다!");
+                    });
+        } catch (Exception e) {
+                throw new UsernameNotFoundException("해당하는 회원은 없습니다.");
+            }
+
         request.setPassword(passwordEncoder.encode(request.getPassword()));
         User user = User.from(request);
         // 회원 저장
@@ -61,8 +71,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void checkEmail(String email) {
-
+    public boolean checkEmail(String email) {
+        return userRepository.findByEmail(email).isEmpty();
     }
 
     public User getEntity(String email) {

@@ -83,6 +83,7 @@ public class SecurityConfig {
 
         // exception authenticationEntryPoint 추가 401 에러 처리
         http.exceptionHandling(exception -> {
+            log.info("here");
             exception.authenticationEntryPoint(customAuthenticationEntryPoint);
         });
         // exceptionHandler, 접근 거부 핸들러 추가
