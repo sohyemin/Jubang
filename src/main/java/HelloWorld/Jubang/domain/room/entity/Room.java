@@ -36,6 +36,7 @@ public class Room extends BaseTimeEntity {
     private String Address2;
 
     // 방 상세정보
+    private int maxPeople;        // 최대 인원
     private int roomRCount; // 침실
     private int roomBCount; // 화장실
     private int roomLCount; // 거실
@@ -77,6 +78,7 @@ public class Room extends BaseTimeEntity {
                 .Address2(dto.getAddress2())
 
                 // 상세 카운트
+                .maxPeople(dto.getMaxPeople())
                 .roomRCount(dto.getRoomRCount())
                 .roomBCount(dto.getRoomBCount())
                 .roomLCount(dto.getRoomLCount())
@@ -109,7 +111,6 @@ public class Room extends BaseTimeEntity {
                                         .map(i -> new RoomImage(i.getImageName(), i.getOrd()))
                                         .toList()
                 )
-
                 .build();
     }
 

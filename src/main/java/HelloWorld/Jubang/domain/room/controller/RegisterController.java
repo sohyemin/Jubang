@@ -9,6 +9,7 @@ import HelloWorld.Jubang.security.UserDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +36,7 @@ public class RegisterController {
      */
     // 방 목록 보기
     @GetMapping("")
-    public Response<List<RoomListResponse>> list(){
+    public Response<Page<RoomListResponse>> list(){
         return null;
     }
 

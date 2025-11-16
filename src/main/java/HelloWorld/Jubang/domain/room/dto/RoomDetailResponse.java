@@ -14,6 +14,7 @@ public class RoomDetailResponse {
     String address2;
 
     // 상세 카운트
+    int maxPeople;        // 최대 인원
     int roomRCount;      // 침실
     int roomBCount;      // 화장실
     int roomLCount;      // 거실
