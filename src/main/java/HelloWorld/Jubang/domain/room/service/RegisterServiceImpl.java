@@ -2,21 +2,26 @@ package HelloWorld.Jubang.domain.room.service;
 
 import HelloWorld.Jubang.domain.room.dto.RegisterRequestDto;
 import HelloWorld.Jubang.domain.room.dto.RoomDetailResponse;
+import HelloWorld.Jubang.domain.room.dto.RoomListResponse;
 import HelloWorld.Jubang.domain.room.dto.RoomModifyRequest;
 import HelloWorld.Jubang.domain.room.entity.Room;
 import HelloWorld.Jubang.domain.room.repository.RegisterRepository;
 import HelloWorld.Jubang.domain.user.entity.User;
 import HelloWorld.Jubang.domain.user.repository.UserRepository;
+import HelloWorld.Jubang.dto.PageRequestDTO;
+import HelloWorld.Jubang.dto.PageResponseDTO;
 import HelloWorld.Jubang.exception.CustomException;
-import HelloWorld.Jubang.security.UserDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 import static HelloWorld.Jubang.exception.ErrorCode.ROOM_NOT_AUTHORIZED;
 import static HelloWorld.Jubang.exception.ErrorCode.ROOM_NOT_FOUND;
@@ -38,8 +43,22 @@ public class RegisterServiceImpl implements RegisterService {
     }
 
     @Override
-    public List<RoomDetailResponse> listAllRoom() {
-        return List.of();
+    public PageResponseDTO<RoomListResponse> listAllRoom(PageRequestDTO requestDTO) {
+
+        Pageable pageable = PageRequest.of(
+                requestDTO.getPage() - 1,
+                requestDTO.getSize(),
+                "asc".equals(requestDTO.getSort()) ?
+                        Sort.by("roomId").ascending() : Sort.by("id").descending()
+        );
+
+        Page<Room> result = registerRepository.findAll(pageable);
+
+        return PageResponseDTO.<RoomListResponse>withAll()
+                .dtoList(result.stream().map(RoomListResponse::toDto).toList())
+                .totalCount(result.getTotalElements())
+                .pageRequestDTO(requestDTO)
+                .build();
     }
 
     @Override
@@ -67,7 +86,7 @@ public class RegisterServiceImpl implements RegisterService {
 
         // 게시글 수정 로직
 
-        return room.getRoomId();
+        return room.getId();
     }
 
     @Override

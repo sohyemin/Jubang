@@ -52,7 +52,8 @@ public class SecurityConfig {
         .authorizeHttpRequests(
                 auth -> auth
                         .requestMatchers("/api/v1/user/join", "/api/v1/user/login", "/api/v1/user/check-email", "/api/v1/user/refresh").permitAll()
-                        .requestMatchers(HttpMethod.GET,   "/api/v1/room/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,   "/api/v1/rooms/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,   "/api/v1/room").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**", "/health", "/favicon.ico", "/static/**").permitAll()
                         .requestMatchers("/api/v1/user/logout").authenticated()
                         .requestMatchers("/api/v1/user/reservation").authenticated()

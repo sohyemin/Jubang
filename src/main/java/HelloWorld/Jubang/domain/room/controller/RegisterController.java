@@ -4,6 +4,8 @@ import HelloWorld.Jubang.domain.room.dto.RegisterRequestDto;
 import HelloWorld.Jubang.domain.room.dto.RoomListResponse;
 import HelloWorld.Jubang.domain.room.dto.RoomModifyRequest;
 import HelloWorld.Jubang.domain.room.service.RegisterService;
+import HelloWorld.Jubang.dto.PageRequestDTO;
+import HelloWorld.Jubang.dto.PageResponseDTO;
 import HelloWorld.Jubang.dto.Response;
 import HelloWorld.Jubang.security.UserDTO;
 import jakarta.validation.Valid;
@@ -32,12 +34,13 @@ public class RegisterController {
     }
 
     /**
-        페이징 처리 필요... 우카냐
+        페이징 처리
      */
     // 방 목록 보기
     @GetMapping("")
-    public Response<Page<RoomListResponse>> list(){
-        return null;
+    public Response<PageResponseDTO<RoomListResponse>> list(
+            @Valid PageRequestDTO pageRequestDTO){
+        return Response.success(registerService.listAllRoom(pageRequestDTO));
     }
 
     // 방 디테일 보기

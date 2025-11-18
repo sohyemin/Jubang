@@ -2,7 +2,10 @@ package HelloWorld.Jubang.domain.room.service;
 
 import HelloWorld.Jubang.domain.room.dto.RegisterRequestDto;
 import HelloWorld.Jubang.domain.room.dto.RoomDetailResponse;
+import HelloWorld.Jubang.domain.room.dto.RoomListResponse;
 import HelloWorld.Jubang.domain.room.dto.RoomModifyRequest;
+import HelloWorld.Jubang.dto.PageRequestDTO;
+import HelloWorld.Jubang.dto.PageResponseDTO;
 import HelloWorld.Jubang.security.UserDTO;
 
 import java.util.List;
@@ -15,7 +18,7 @@ public interface RegisterService {
 
     /** READ **/
     //방 전체 목록
-    List<RoomDetailResponse> listAllRoom();
+    PageResponseDTO<RoomListResponse> listAllRoom(PageRequestDTO requestDTO);
     //방 디테일
     RoomDetailResponse detailRoom(Long roomId);
     // host의 방 목록
