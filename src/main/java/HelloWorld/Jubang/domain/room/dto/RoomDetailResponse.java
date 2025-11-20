@@ -1,7 +1,15 @@
 package HelloWorld.Jubang.domain.room.dto;
 
+import HelloWorld.Jubang.domain.room.entity.Room;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class RoomDetailResponse {
 
     // 기본 정보
@@ -42,4 +50,8 @@ public class RoomDetailResponse {
 
     // 이미지
     List<RoomImageRequest> images;
+
+    public static RoomDetailResponse to(Room room) {
+        return RoomDetailResponse.builder().build();
+    }
 }

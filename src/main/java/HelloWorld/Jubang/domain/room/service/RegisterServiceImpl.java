@@ -63,12 +63,12 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Override
     public RoomDetailResponse detailRoom(Long roomNo) {
-        return null;
+        return RoomDetailResponse.to(getEntity(roomNo));
     }
 
     @Override
-    public List<RoomDetailResponse> listAllRoomforHost() {
-        return List.of();
+    public PageResponseDTO<RoomDetailResponse> listAllRoomforHost(PageRequestDTO requestDTO) {
+        return null;
     }
 
     @Override
