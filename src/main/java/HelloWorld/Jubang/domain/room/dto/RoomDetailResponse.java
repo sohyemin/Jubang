@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Builder
@@ -58,12 +59,12 @@ public class RoomDetailResponse {
 
                 // 기본 정보
                 .roomName(room.getRoomName())
-                .Description(room.getDescription())
+                .description(room.getDescription())
 
                 // 주소
-                .Zipcode(room.getZipcode())
-                .Address1(room.getAddress1())
-                .Address2(room.getAddress2())
+                .zipcode(room.getZipcode())
+                .address1(room.getAddress1())
+                .address2(room.getAddress2())
 
                 // 상세 카운트
                 .maxPeople(room.getMaxPeople())
@@ -73,30 +74,30 @@ public class RoomDetailResponse {
                 .roomKCount(room.getRoomKCount())
 
                 // 옵션 (List → String)
-                .basicOption(String.join(",", room.getBasicOptions()))
-                .additionalOption(String.join(",", room.getAdditionalOptions()))
+                .basicOptions(Arrays.stream(room.getBasicOption().split(",")).toList())
+                .additionalOptions(Arrays.stream(room.getAdditionalOption().split(",")).toList())
 
                 // 건물/편의
                 .building(room.getBuilding())
-                .infoElevator(room.isElevator())
-                .infoParking(room.isParking())
+                .elevator(room.isInfoElevator())
+                .parking(room.isInfoParking())
 
                 // 가격
-                .roomLeastPay(room.getLeastPay())
-                .roomDeposit(room.getDeposit())
-                .roomRent(room.getRent())
-                .roomAdministrationFee(room.getAdministrationFee())
-                .roomPayOption(room.getPayOption())
+                .leastPay(room.getRoomLeastPay())
+                .deposit(room.getRoomDeposit())
+                .rent(room.getRoomRent())
+                .administrationFee(room.getRoomAdministrationFee())
+                .payOption(room.getRoomPayOption())
 
                 // 할인
-                .roomDiscount(room.getDiscount())
-                .roomDiscountFee(room.getDiscountFee())
+                .discount(room.getRoomDiscount())
+                .discountFee(room.getRoomDiscountFee())
 
                 // 이미지 (List<RoomImageRequest> → List<RoomImage>)
-                .imageList(
-                        room.getImages() == null ? new ArrayList<>() :
-                                room.getImages().stream()
-                                        .map(i -> new RoomImage(i.getImageName(), i.getOrd()))
+                .images(
+                        room.getImageList() == null ? new ArrayList<>() :
+                                room.getImageList().stream()
+                                        .map(i -> new RoomImageRequest(i.getImageName(), i.getOrd()))
                                         .toList()
                 )
                 .build();
