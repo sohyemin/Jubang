@@ -1,6 +1,7 @@
 package HelloWorld.Jubang.domain.room.controller;
 
 import HelloWorld.Jubang.domain.room.dto.RegisterRequestDto;
+import HelloWorld.Jubang.domain.room.dto.RoomDetailResponse;
 import HelloWorld.Jubang.domain.room.dto.RoomListResponse;
 import HelloWorld.Jubang.domain.room.dto.RoomModifyRequest;
 import HelloWorld.Jubang.domain.room.service.RegisterService;
@@ -11,11 +12,8 @@ import HelloWorld.Jubang.security.UserDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -45,10 +43,8 @@ public class RegisterController {
 
     // 방 디테일 보기
     @GetMapping("/{roomId}")
-    public Response<String> roomDetail(@PathVariable Long roomId){
-
-
-        return Response.success("상세 정보 불러오기 성공. roomId: " + roomId);
+    public Response<RoomDetailResponse> roomDetail(@PathVariable Long roomId){
+        return Response.success(registerService.detailRoom(roomId));
     }
 
     // 수정
