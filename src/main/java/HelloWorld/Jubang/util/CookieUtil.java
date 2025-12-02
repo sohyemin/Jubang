@@ -1,7 +1,11 @@
 package HelloWorld.Jubang.util;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseCookie;
+
+import java.util.Arrays;
 
 public class CookieUtil {
 
@@ -22,6 +26,28 @@ public class CookieUtil {
                 .secure(true)
                 .sameSite("None")
                 .maxAge(0L)
+                .build();
+
+        response.addHeader("Set-Cookie", cookie.toString());
+    }
+
+    public static String getTokenFromCookie(HttpServletRequest request, String name) {
+        Cookie[] cookies = request.getCookies();
+
+        return Arrays.stream(cookies)
+                .filter(cookie -> cookie.getName().equals(name))
+                .findFirst()
+                .map(Cookie::getValue)
+                .orElse(null);
+    }
+
+    public static void setNewRefreshTokenCookie(HttpServletResponse response, String refreshToken, String newRefreshToken) {
+        ResponseCookie cookie = ResponseCookie.from(refreshToken, newRefreshToken)
+                .path("/")
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .maxAge(24 * 60 * 60) // 1day
                 .build();
 
         response.addHeader("Set-Cookie", cookie.toString());

@@ -2,6 +2,7 @@ package HelloWorld.Jubang.security.service;
 
 import HelloWorld.Jubang.domain.user.dto.LoginResponseDTO;
 import HelloWorld.Jubang.domain.user.entity.User;
+import HelloWorld.Jubang.domain.user.repository.UserRepository;
 import HelloWorld.Jubang.props.JwtProps;
 import HelloWorld.Jubang.security.repository.TokenRepository;
 import HelloWorld.Jubang.util.JWTUtil;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.RefreshFailedException;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TokenService {
 
+    private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
     private final JWTUtil jwtUtil;
     private final JwtProps jwtProps;
@@ -57,6 +60,54 @@ public class TokenService {
                 .roles(roleNames)
                 .accessToken(accessToken)
                 .refreshToken(refreshToken) // 모바일 클라이언트를 위해 refreshToken도 반환 (웹은 쿠키 사용)
+                .build();
+    }
+
+    /**
+     * 토큰 갱신
+     */
+    public LoginResponseDTO refreshTokens(String refreshToken) throws RefreshFailedException {
+        // 토큰 검증
+        if (refreshToken == null) {
+            throw new RefreshFailedException("REFRESH_TOKEN_NOT_FOUND");
+        }
+
+        Map<String, Object> claims = jwtUtil.validateToken(refreshToken);
+        String email = claims.get("email").toString();
+
+        // Redis에 저장된 리프레시 토큰과 비교
+        String storedRefreshToken = tokenRepository.getRefreshToken(email);
+
+        if (storedRefreshToken == null || !storedRefreshToken.equals(refreshToken)) {
+            throw new RefreshFailedException("REFRESH_TOKEN_NOT_FOUND");
+        }
+
+        // 토큰 만료 시간 체크
+        Integer exp = (Integer) claims.get("exp");
+        long expiration = Instant.ofEpochSecond(exp).toEpochMilli();
+        long oneHourInMillis = 60 * 60 * 1000;
+        boolean shouldRefreshRefreshToken = (expiration - System.currentTimeMillis()) < oneHourInMillis;
+
+        // 회원 정보 조회
+        User user = userRepository.getWithRoles(email)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
+
+        // 새 액세스 토큰 발급
+        String newAccessToken = jwtUtil.generateToken(claims, jwtProps.getAccessTokenExpirationPeriod());
+
+        // 리프레시 토큰이 1시간 이내로 만료되는 경우 갱신
+        String newRefreshToken = refreshToken;
+        if (shouldRefreshRefreshToken) {
+            newRefreshToken = jwtUtil.generateToken(claims, jwtProps.getRefreshTokenExpirationPeriod());
+            tokenRepository.saveRefreshToken(email, newRefreshToken, jwtProps.getRefreshTokenExpirationPeriod());
+        }
+
+        return LoginResponseDTO.builder()
+                .email(user.getEmail())
+                .name(user.getName())
+                .roles(user.getUserRoleList().stream().map(Enum::name).collect(Collectors.toList()))
+                .accessToken(newAccessToken)
+                .refreshToken(newRefreshToken)
                 .build();
     }
 

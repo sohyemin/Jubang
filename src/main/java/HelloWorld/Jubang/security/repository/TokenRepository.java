@@ -28,6 +28,14 @@ public class TokenRepository {
     }
 
     /**
+     * 리프레시 토큰 조회
+     */
+    public String getRefreshToken(String email) {
+        String key = REFRESH_TOKEN_PREFIX + email;
+        return redisTemplate.opsForValue().get(key);
+    }
+
+    /**
      * 리프레시 토큰 삭제 (로그아웃 시)
      */
     public void deleteRefreshToken(String email){

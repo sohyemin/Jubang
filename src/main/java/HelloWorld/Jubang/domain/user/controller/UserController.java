@@ -19,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.RefreshFailedException;
+
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/user")
@@ -92,6 +94,33 @@ public class UserController {
         return Response.success("Logout successful");
     }
 
+    @PostMapping("/refresh")
+    public Response<LoginResponseDTO> refresh(
+            @RequestParam(required = false, defaultValue = "web") String clientType,
+            @CookieValue(value = "refreshToken", required = false) String cookieRefreshToken,
+            @RequestHeader(value = "Refresh-Token", required = false) String headerRefreshToken,
+            HttpServletResponse response) throws RefreshFailedException {
+
+
+        log.info("refresh refreshToken: {} , headerRefreshToken: {}, clientType: {} ", cookieRefreshToken, headerRefreshToken, clientType);
+
+        // 클라이언트 타입에 따라 리프레시 토큰 가져오기
+        String refreshToken = "web".equals(clientType) ? cookieRefreshToken : headerRefreshToken;
+
+        // 토큰 갱신 처리
+        LoginResponseDTO refreshedTokens = tokenService.refreshTokens(refreshToken);
+
+        // 웹 클라이언트인 경우 새 리프레시 토큰을 쿠키에 저장
+        if ("web".equals(clientType)) {
+            CookieUtil.setTokenCookie(response, "refreshToken", refreshedTokens.getRefreshToken(),
+                    jwtProps.getRefreshTokenExpirationPeriod());
+            // 응답에서는 리프레시 토큰 제거
+            refreshedTokens.setRefreshToken(null);
+        }
+
+        return Response.success(refreshedTokens);
+    }
+
     @DeleteMapping
     public Response<?> deleteUser(@AuthenticationPrincipal UserDTO userDTO) {
         userService.deleteUser(userDTO.getEmail());
@@ -106,4 +135,6 @@ public class UserController {
         }
         return null;
     }
+
+
 }
