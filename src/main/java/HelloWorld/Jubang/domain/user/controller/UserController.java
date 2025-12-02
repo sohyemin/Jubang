@@ -98,10 +98,12 @@ public class UserController {
     public Response<LoginResponseDTO> refresh(
             @RequestParam(required = false, defaultValue = "web") String clientType,
             @CookieValue(value = "refreshToken", required = false) String cookieRefreshToken,
-            @RequestHeader(value = "Refresh-Token", required = false) String headerRefreshToken,
+            @RequestHeader(value = "refreshToken", required = false) String headerRefreshToken,
+            HttpServletRequest request,
             HttpServletResponse response) throws RefreshFailedException {
 
-
+        log.info("raw Cookie header: {}", request.getHeader("Cookie"));
+        log.info("raw Cookie header: {}", response.getHeader("Cookie"));
         log.info("refresh refreshToken: {} , headerRefreshToken: {}, clientType: {} ", cookieRefreshToken, headerRefreshToken, clientType);
 
         // 클라이언트 타입에 따라 리프레시 토큰 가져오기
