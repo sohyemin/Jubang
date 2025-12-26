@@ -1,7 +1,11 @@
 package HelloWorld.Jubang.domain.post.dto;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class PostRequestDTO {
+
 }
